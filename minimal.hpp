@@ -96,25 +96,30 @@ public:
 class MinEngine : public fcitx::InputMethodEngineV2
 {
 public:
-  MinEngine(fcitx::Instance* instance)
+  MinEngine(fcitx::Instance* instance) : instance_(instance)
   {
-
   }
 
   void activate(const fcitx::InputMethodEntry& entry, fcitx::InputContextEvent& ctxEvent)
   {
-
+    inputCtx_ = ctxEvent.inputContext();
   }
 
   void keyEvent(const fcitx::InputMethodEntry& entry, fcitx::KeyEvent* keyEvent)
   {
-
+    // We only accept a-z
+    if (keyEvent->key().isLAZ()) {
+      keyEvent->accept();
+      auto keyStr = keyEvent->key().toString();
+    }
   }
 
   void reset(const fcitx::InputMethodEntry& entry, fcitx::InputContextEvent& ctxEvent)
   {
-
   }
+private:
+  fcitx::Instance* instance_;
+  fcitx::InputContext* inputCtx_;
 };
 
 #endif // _FCITX5_MINIMAL_H_
